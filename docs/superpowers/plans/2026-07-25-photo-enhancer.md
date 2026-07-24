@@ -1240,9 +1240,4 @@ Google Driveの「加工依頼」フォルダに入れた写真を自動で明�
 Run: `cat .company/engineering/CLAUDE.md .company/engineering/docs/photo-enhancer.md`
 Expected: 意図した内容が表示される
 
-- [ ] **Step 6: コミット**
-
-```bash
-git add .company/engineering .company/CLAUDE.md .company/marketing/content-seeds.md
-git commit -m "docs: add engineering department and photo-enhancer documentation"
-```
+`.company/` はGit管理対象外(`.gitignore` 済み)のため、このタスクにコミット手順はない。ファイル作成のみで完了。
