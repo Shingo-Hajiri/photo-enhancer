@@ -100,6 +100,33 @@ def test_enhance_image_alters_bright_image_less_than_dark_image():
     assert bright_delta < dark_delta
 
 
+def test_enhance_image_alters_well_lit_photo_less_than_fixed_strength_pipeline():
+    rng = np.random.default_rng(42)
+    # Non-flat, warm-toned bright image: B lower than G/R (like a real bakery photo),
+    # with per-pixel variation so auto_white_balance / auto_level are not no-ops.
+    bright_image = np.clip(
+        rng.normal(loc=[150, 175, 190], scale=10, size=(40, 40, 3)),
+        0,
+        255,
+    ).astype(np.uint8)
+
+    def fixed_strength_pipeline(image_bgr, config):
+        result = auto_white_balance(image_bgr)
+        result = auto_level(result)
+        result = gamma_correct(result, config.gamma)
+        result = boost_saturation(result, config.saturation_boost)
+        result = apply_clahe(result, config.clahe_clip_limit)
+        return result
+
+    adaptive_result = enhance_image(bright_image, DEFAULT_CONFIG)
+    fixed_result = fixed_strength_pipeline(bright_image, DEFAULT_CONFIG)
+
+    adaptive_delta = np.abs(adaptive_result.astype(np.int16) - bright_image.astype(np.int16)).mean()
+    fixed_delta = np.abs(fixed_result.astype(np.int16) - bright_image.astype(np.int16)).mean()
+
+    assert adaptive_delta < fixed_delta
+
+
 def test_enhance_image_bytes_returns_valid_jpeg():
     image = np.random.randint(20, 200, (30, 30, 3), dtype=np.uint8)
     success, encoded = cv2.imencode(".jpg", image)
