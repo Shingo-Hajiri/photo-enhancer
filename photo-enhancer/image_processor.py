@@ -63,12 +63,40 @@ def apply_clahe(image_bgr: np.ndarray, clip_limit: float) -> np.ndarray:
     return cv2.cvtColor(merged, cv2.COLOR_LAB2BGR)
 
 
+def compute_correction_strength(image_bgr: np.ndarray, config) -> float:
+    gray_mean = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY).mean()
+    if gray_mean >= config.adaptive_bright_threshold:
+        return config.adaptive_min_strength
+    if gray_mean <= config.adaptive_dark_threshold:
+        return 1.0
+    t = (gray_mean - config.adaptive_dark_threshold) / (
+        config.adaptive_bright_threshold - config.adaptive_dark_threshold
+    )
+    return 1.0 - t * (1.0 - config.adaptive_min_strength)
+
+
+def _blend(a: np.ndarray, b: np.ndarray, t: float) -> np.ndarray:
+    return (a.astype(np.float32) * (1 - t) + b.astype(np.float32) * t).astype(np.uint8)
+
+
 def enhance_image(image_bgr: np.ndarray, config) -> np.ndarray:
-    result = auto_white_balance(image_bgr)
-    result = auto_level(result)
-    result = gamma_correct(result, config.gamma)
-    result = boost_saturation(result, config.saturation_boost)
-    result = apply_clahe(result, config.clahe_clip_limit)
+    strength = compute_correction_strength(image_bgr, config)
+
+    wb_full = auto_white_balance(image_bgr)
+    wb = _blend(image_bgr, wb_full, strength)
+
+    level_full = auto_level(wb)
+    level = _blend(wb, level_full, strength)
+
+    gamma_value = 1.0 + (config.gamma - 1.0) * strength
+    result = gamma_correct(level, gamma_value)
+
+    saturation_value = 1.0 + (config.saturation_boost - 1.0) * strength
+    result = boost_saturation(result, saturation_value)
+
+    clahe_value = max(config.clahe_clip_limit * strength, 0.1)
+    result = apply_clahe(result, clahe_value)
+
     return result
 
 

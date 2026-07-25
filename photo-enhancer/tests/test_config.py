@@ -10,6 +10,9 @@ def test_default_config_matches_spec_values():
     assert DEFAULT_CONFIG.request_folder_name == "加工依頼"
     assert DEFAULT_CONFIG.processed_folder_name == "加工済み"
     assert DEFAULT_CONFIG.root_folder_name == "Instagram画像加工"
+    assert DEFAULT_CONFIG.adaptive_bright_threshold == 165.0
+    assert DEFAULT_CONFIG.adaptive_dark_threshold == 110.0
+    assert DEFAULT_CONFIG.adaptive_min_strength == 0.15
 
 
 def test_paths_point_inside_photo_enhancer_directory():
