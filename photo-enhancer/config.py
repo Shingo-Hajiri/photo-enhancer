@@ -13,6 +13,9 @@ class Config:
     saturation_boost: float = 1.15
     gamma: float = 1.2
     clahe_clip_limit: float = 1.5
+    adaptive_bright_threshold: float = 165.0
+    adaptive_dark_threshold: float = 110.0
+    adaptive_min_strength: float = 0.15
     retention_days: int = 7
     run_times: List[str] = field(default_factory=lambda: ["22:00", "23:30"])
     credentials_path: str = os.path.join(BASE_DIR, "credentials", "credentials.json")
