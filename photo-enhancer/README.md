@@ -20,6 +20,11 @@ pip install -r requirements.txt
 3. 「認証情報」→「認証情報を作成」→「OAuthクライアントID」→アプリケーションの種類は **デスクトップアプリ**
 4. 作成したクライアントIDの認証情報をJSONでダウンロードし、`photo-enhancer/credentials/credentials.json` として保存
 
+> **注意: OAuth同意画面と「テスト」ステータスについて**
+> 新規に作成したOAuthアプリは「テスト」公開ステータスになり、Googleはこのステータスのリフレッシュトークンを**7日で失効**させる。本ツールは個人の単一アカウント用なので、失効しないようアプリを「本番」ステータスに公開する(Googleの審査が必要で数週間かかる)のはオーバースペック。実用上は以下で十分:
+> - 「APIとサービス」→「OAuth同意画面」で、テストユーザーとして自分のGoogleアカウントを追加しておく
+> - トークンが失効してツールが止まった場合(この場合は下記のTODO通知が届く)、`python3 main.py` を手動実行してブラウザで再認証すればよい。これで次の7日間はまた自動実行される
+
 ### 3. 初回実行(トークン発行)
 
 ```bash
@@ -60,6 +65,7 @@ launchctl unload ~/Library/LaunchAgents/com.sweets.photoenhancer.plist
 
 - 実行ログ: `logs/photo_enhancer.log`
 - 加工エラーが発生した場合、`.company/secretary/todos/YYYY-MM-DD.md` に通知が追記される
+- OAuthトークン失効などで実行自体が異常終了した場合も、同様に `.company/secretary/todos/YYYY-MM-DD.md` に通知が追記される(手動での再認証が必要な合図)
 - 加工に失敗した画像は「加工依頼」フォルダに残るので、そのまま次回再試行される
 
 ## 設定の変更

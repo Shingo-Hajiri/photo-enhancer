@@ -1,3 +1,5 @@
+import pytest
+
 import main as main_module
 
 
@@ -52,6 +54,25 @@ def test_main_notifies_todo_on_errors(monkeypatch):
     )
 
     main_module.main()
+
+    assert len(notified) == 1
+    assert "エラー" in notified[0]
+
+
+def test_main_notifies_todo_and_reraises_on_unhandled_exception(monkeypatch):
+    def boom(*a, **k):
+        raise RuntimeError("credentials file missing")
+
+    monkeypatch.setattr(main_module, "get_credentials", boom)
+
+    notified = []
+    monkeypatch.setattr(
+        main_module, "append_todo_notification",
+        lambda todos_dir, message: notified.append(message),
+    )
+
+    with pytest.raises(RuntimeError):
+        main_module.main()
 
     assert len(notified) == 1
     assert "エラー" in notified[0]
