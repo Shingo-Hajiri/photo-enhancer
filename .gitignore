@@ -1,7 +1,6 @@
 .DS_Store
-.claude/settings.local.json
-.company/
-photo-enhancer/venv/
-photo-enhancer/credentials/*.json
-photo-enhancer/logs/*.log
+venv/
+credentials/*.json
+logs/*.log
 **/__pycache__/
+.pytest_cache/

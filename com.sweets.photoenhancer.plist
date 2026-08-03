@@ -6,11 +6,11 @@
     <string>com.sweets.photoenhancer</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/hajirishingo/Desktop/dev/sweets-cc-company/photo-enhancer/venv/bin/python3</string>
-        <string>/Users/hajirishingo/Desktop/dev/sweets-cc-company/photo-enhancer/main.py</string>
+        <string>/Users/hajirishingo/Desktop/dev/apps/photo-enhancer/venv/bin/python3</string>
+        <string>/Users/hajirishingo/Desktop/dev/apps/photo-enhancer/main.py</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/hajirishingo/Desktop/dev/sweets-cc-company/photo-enhancer</string>
+    <string>/Users/hajirishingo/Desktop/dev/apps/photo-enhancer</string>
     <key>StartCalendarInterval</key>
     <array>
         <dict>
@@ -27,8 +27,8 @@
         </dict>
     </array>
     <key>StandardOutPath</key>
-    <string>/Users/hajirishingo/Desktop/dev/sweets-cc-company/photo-enhancer/logs/launchd.out.log</string>
+    <string>/Users/hajirishingo/Desktop/dev/apps/photo-enhancer/logs/launchd.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/hajirishingo/Desktop/dev/sweets-cc-company/photo-enhancer/logs/launchd.err.log</string>
+    <string>/Users/hajirishingo/Desktop/dev/apps/photo-enhancer/logs/launchd.err.log</string>
 </dict>
 </plist>
